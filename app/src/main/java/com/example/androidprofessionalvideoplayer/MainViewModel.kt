@@ -15,14 +15,14 @@ import kotlinx.coroutines.flow.stateIn
 class MainViewModel(
 
     private val savedStateHandle: SavedStateHandle,
-    private val player: Player,
+    val player: Player,
     private val metaDataReader: MetaDataReader
 ): ViewModel()
 {
 
     private val videoUris = savedStateHandle.getStateFlow("videoUris", emptyList<Uri>())
 
-    private val videoItems = videoUris.map{ uris ->
+    val videoItems = videoUris.map{ uris ->
         uris.map{uri ->
             VideoItem(
                 contentUri = uri,
