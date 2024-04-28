@@ -1,6 +1,13 @@
+import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformType
+
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
+
+    apply {
+        "dagger.hilt.android.plugin"
+    }
+    //id("kotlin-android") version "1.7.20"
 }
 
 android {
@@ -9,7 +16,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.androidprofessionalvideoplayer"
-        minSdk = 24
+        minSdk = 23
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -47,6 +54,14 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+    packagingOptions {
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+        }
+    }
+
+    // Allow references to generated code
+
 }
 
 dependencies {
@@ -75,4 +90,13 @@ dependencies {
     implementation (libs.androidx.hilt.navigation.compose)
     implementation (libs.androidx.material.icons.extended)
     implementation (libs.androidx.lifecycle.viewmodel.compose)
+    //implementation (libs.hilt.compiler)
+
+
+    implementation(libs.hilt.android.v244)
+    //kapt ("com.google.dagger:hilt-android-compiler:$hiltVersion")
+
+
+    implementation (libs.androidx.media3.exoplayer)
+    implementation (libs.androidx.media3.ui)
 }
