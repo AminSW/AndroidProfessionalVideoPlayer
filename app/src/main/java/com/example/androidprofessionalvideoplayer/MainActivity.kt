@@ -41,9 +41,11 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.media3.ui.PlayerView
 import com.example.androidprofessionalvideoplayer.ui.theme.AndroidProfessionalVideoPlayerTheme
 import dagger.hilt.android.AndroidEntryPoint
+import dagger.internal.DaggerGenerated
+
 
 @AndroidEntryPoint
-class MainActivity : ComponentActivity() {
+class MainActivity : ComponentActivity(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -53,17 +55,15 @@ class MainActivity : ComponentActivity() {
                 val videoItems by viewModel.videoItems.collectAsState()
                 val selectVideoLauncher = rememberLauncherForActivityResult(
                     contract = ActivityResultContracts.GetContent(),
-                    onResult = {uri ->
-                    uri?.let { viewModel::addVideoUri }
-
+                    onResult = { uri ->
+                        uri?.let(viewModel::addVideoUri)
                     }
                 )
-
                 var lifecycle by remember {
                     mutableStateOf(Lifecycle.Event.ON_CREATE)
                 }
                 val lifecycleOwner = LocalLifecycleOwner.current
-                DisposableEffect(lifecycleOwner){
+                DisposableEffect(lifecycleOwner) {
                     val observer = LifecycleEventObserver { _, event ->
                         lifecycle = event
                     }
@@ -71,7 +71,6 @@ class MainActivity : ComponentActivity() {
 
                     onDispose {
                         lifecycleOwner.lifecycle.removeObserver(observer)
-
                     }
                 }
 
@@ -79,17 +78,15 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(16.dp)
-                )
-                {
+                ) {
                     AndroidView(
                         factory = { context ->
-                            PlayerView(context)
-                                .also {
-                                    it.player = viewModel.player
-                                }
+                            PlayerView(context).also {
+                                it.player = viewModel.player
+                            }
                         },
                         update = {
-                            when(lifecycle){
+                            when (lifecycle) {
                                 Lifecycle.Event.ON_PAUSE -> {
                                     it.onPause()
                                     it.player?.pause()
@@ -110,14 +107,14 @@ class MainActivity : ComponentActivity() {
                     }) {
                         Icon(
                             imageVector = Icons.Default.FileOpen,
-                            contentDescription = "Select Video"
+                            contentDescription = "Select video"
                         )
                     }
                     Spacer(modifier = Modifier.height(16.dp))
                     LazyColumn(
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        items(videoItems){item ->
+                        items(videoItems) { item ->
                             Text(
                                 text = item.name,
                                 modifier = Modifier
@@ -133,6 +130,7 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
 }
 
 @Composable
